@@ -6,7 +6,7 @@ import org.opencv.imgcodecs.Imgcodecs
 import org.opencv.imgproc.Imgproc.GaussianBlur
 
 fun main(args: Array<String>) {
-    // 一定要载入静态库 "/usr/local/Cellar/opencv/4.5.4_1/share/java/opencv4/libopencv_java454.dylib"
+    // 一定要载入静态库
     println(Core.NATIVE_LIBRARY_NAME)
     System.loadLibrary(Core.NATIVE_LIBRARY_NAME)
     println("Using OpenCV v${Core.VERSION}")
