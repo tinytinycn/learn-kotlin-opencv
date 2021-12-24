@@ -10,7 +10,7 @@ fun main() {
     println("使用 OpenCV 版本: v${Core.VERSION}")
 
     val resourcesPath = System.getProperty("user.dir") + "/src/main/resources/"
-    val testResultOutPath = resourcesPath+"test_result_out/"
+    val testResultOutPath = resourcesPath + "test_result_out/"
     println("图片资源路径: $resourcesPath")
 
     val img: Mat = imread(resourcesPath + "not_found.jpeg")
@@ -27,5 +27,4 @@ fun main() {
         println("您按下了 's' 键")
         imwrite(testResultOutPath + "save_tiny_logo.png", img2)
     }
-    destroyAllWindows()
 }
