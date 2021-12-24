@@ -27,20 +27,20 @@ OpenJDK 64-Bit Server VM (AdoptOpenJDK)(build 25.292-b10, mixed mode)
    采用 `brew install --build-from-source opencv`的方式openCV 会安装至 `/usr/local/Cellar/opencv/x.x.x/`下, 此目录下包含需要的 jar包和
    dylib库文件. 此方案编译后的Java 类文件版本较新, 因此运行Java开发程序的时候推荐使用最新JDK版本运行, 否则会出现以下问题. 若需要打包分发Java开发程序, 那么，最好编译为较旧版本(即，采用源码编译的方式).
    JDK11不能允许Java开发程序, 我们通过sdkman 切换至较新JDK17版本后, 即可成功运行
-
-> /Users/tinytinycn/.sdkman/candidates/java/11.0.2-open/bin/java -Djava.library.path=/usr/local/Cellar/opencv/4.5.4_1/share/java/opencv4 -javaagent:/Applications/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=54635:/Applications/IntelliJ IDEA.app/Contents/bin -Dfile.encoding=UTF-8 -classpath /Users/tinytinycn/IdeaProjects/learn-java-opencv/out/production/learn-java-opencv:/usr/local/Cellar/opencv/4.5.4_1/share/java/opencv4/opencv-454.jar com.company.Main
-> Exception in thread "main" java.lang.UnsupportedClassVersionError: org/opencv/core/Core has been compiled by a more recent version of the Java Runtime (class file version 61.0), this version of the Java Runtime only recognizes class file versions up to 55.0
-> at java.base/java.lang.ClassLoader.defineClass1(Native Method)
-> at java.base/java.lang.ClassLoader.defineClass(ClassLoader.java:1016)
-> at java.base/java.security.SecureClassLoader.defineClass(SecureClassLoader.java:174)
-> at java.base/jdk.internal.loader.BuiltinClassLoader.defineClass(BuiltinClassLoader.java:802)
-> at java.base/jdk.internal.loader.BuiltinClassLoader.findClassOnClassPathOrNull(BuiltinClassLoader.java:700)
-> at java.base/jdk.internal.loader.BuiltinClassLoader.loadClassOrNull(BuiltinClassLoader.java:623)
-> at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:581)
-> at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:178)
-> at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:521)
-> at com.company.Main.main(Main.java:16)
-
+```text
+/Users/tinytinycn/.sdkman/candidates/java/11.0.2-open/bin/java -Djava.library.path=/usr/local/Cellar/opencv/4.5.4_1/share/java/opencv4 -javaagent:/Applications/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=54635:/Applications/IntelliJ IDEA.app/Contents/bin -Dfile.encoding=UTF-8 -classpath /Users/tinytinycn/IdeaProjects/learn-java-opencv/out/production/learn-java-opencv:/usr/local/Cellar/opencv/4.5.4_1/share/java/opencv4/opencv-454.jar com.company.Main
+Exception in thread "main" java.lang.UnsupportedClassVersionError: org/opencv/core/Core has been compiled by a more recent version of the Java Runtime (class file version 61.0), this version of the Java Runtime only recognizes class file versions up to 55.0
+at java.base/java.lang.ClassLoader.defineClass1(Native Method)
+at java.base/java.lang.ClassLoader.defineClass(ClassLoader.java:1016)
+at java.base/java.security.SecureClassLoader.defineClass(SecureClassLoader.java:174)
+at java.base/jdk.internal.loader.BuiltinClassLoader.defineClass(BuiltinClassLoader.java:802)
+at java.base/jdk.internal.loader.BuiltinClassLoader.findClassOnClassPathOrNull(BuiltinClassLoader.java:700)
+at java.base/jdk.internal.loader.BuiltinClassLoader.loadClassOrNull(BuiltinClassLoader.java:623)
+at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:581)
+at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:178)
+at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:521)
+at com.company.Main.main(Main.java:16)
+```
 7. 安装git
 8. 创建源码下载目录, `mkdir ~/your_opencv_project`
 9. 进入源码下载目录`cd ~/your_opencv_project` 下载源码, `git clone https://github.com/opencv/opencv.git` (
@@ -49,20 +49,18 @@ OpenJDK 64-Bit Server VM (AdoptOpenJDK)(build 25.292-b10, mixed mode)
 11. 进入编译目录, `cd build`
 12. 创建安装目录, `mkdir /user/local/Cellar/opencv_jdk8`
 13. 编译检查 `cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHAERED_LIBS=OFF -DCMAKE_INSTALL_PREFIX=/usr/local/Cellar/opencv_jdk8 ../`
-
-> -- Java:
-> -- ant:                         /usr/local/bin/ant (ver 1.10.11)
-> -- JNI:                         /Library/Java/JavaVirtualMachines/jdk1.8.0_251.jdk/Contents/Home/include /Library/Java/JavaVirtualMachines/jdk1.8.0_251.jdk/Contents/Home/include/darwin /Library/Java/JavaVirtualMachines/jdk1.8.0_251.jdk/Contents/Home/include
-> -- Java wrappers:               YES
-> -- Java tests:                  YES
-> --
-> -- Install to:                    /usr/local
-> -- -----------------------------------------------------------------
->
-> -- Configuring done
->
-> -- Generating done
-
+```text
+-- Java:
+-- ant:                         /usr/local/bin/ant (ver 1.10.11)
+-- JNI:                         /Library/Java/JavaVirtualMachines/jdk1.8.0_251.jdk/Contents/Home/include /Library/Java/JavaVirtualMachines/jdk1.8.0_251.jdk/Contents/Home/include/darwin /Library/Java/JavaVirtualMachines/jdk1.8.0_251.jdk/Contents/Home/include
+-- Java wrappers:               YES
+-- Java tests:                  YES
+-- 
+-- Install to:                    /usr/local
+-- ------------
+-- Configuring done
+-- Generating done
+```
 14. 检查相关依赖是否安装， 确保ant,JNI,Java wrappers等环境变量正常
 15. 执行 `make -j8` 进行编译, 等待编译结束
 16. 编译成功100%后, 执行 `make install`, 进行安装
@@ -73,16 +71,16 @@ OpenJDK 64-Bit Server VM (AdoptOpenJDK)(build 25.292-b10, mixed mode)
 System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 ```
 20. 在External Libraries 中可以查看opencv-455.jar 的 META-INF/MANIFEST.MF, 可以发现编译java版本为 1.8
-
-> Manifest-Version: 1.0
-> Ant-Version: Apache Ant 1.10.12
-> Created-By: 1.8.0_292-b10 (AdoptOpenJDK)
-> Specification-Title: OpenCV
-> Specification-Version: 4.5.5-pre
-> Implementation-Title: OpenCV
-> Implementation-Version: 4.5.4-347-g9777fbacf6
-> Implementation-Date: 星期五 十二月 24 2021 11:40:16 CST
-
+```text
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.10.12
+Created-By: 1.8.0_292-b10 (AdoptOpenJDK)
+Specification-Title: OpenCV
+Specification-Version: 4.5.5-pre
+Implementation-Title: OpenCV
+Implementation-Version: 4.5.4-347-g9777fbacf6
+Implementation-Date: 星期五 十二月 24 2021 11:40:16 CST
+```
 ## 参考链接
 - [Installation in MacOS](https://docs.opencv.org/4.5.4/d0/db2/tutorial_macos_install.html)
 - [01-installing-opencv-for-java](https://opencv-java-tutorials.readthedocs.io/en/latest/01-installing-opencv-for-java.html#install-opencv-3-x-under-macos)
