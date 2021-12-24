@@ -84,6 +84,8 @@ System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 > Implementation-Date: 星期五 十二月 24 2021 11:40:16 CST
 
 ## 参考链接
+- [Installation in MacOS](https://docs.opencv.org/4.5.4/d0/db2/tutorial_macos_install.html)
+- [01-installing-opencv-for-java](https://opencv-java-tutorials.readthedocs.io/en/latest/01-installing-opencv-for-java.html#install-opencv-3-x-under-macos)
 - [编译opencv精简静态库](https://heroinlin.github.io/2018/04/18/opencv/build_opencv_simple_lib/)
 - [在C++/Python/Java/ObjectC中使用OpenCV](https://zhuanlan.zhihu.com/p/90035154)
 - [macOS和Linux上手动编译OpenCV并作为依赖添加到Python/C++/Java](https://juejin.cn/post/7027845214756667423)
