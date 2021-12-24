@@ -2,3 +2,4 @@
 build
 .idea
 .gradle
+/src/main/resources/test_result_out/
