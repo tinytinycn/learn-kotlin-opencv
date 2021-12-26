@@ -1,3 +1,5 @@
+import org.jetbrains.kotlinx.multik.api.mk
+import org.jetbrains.kotlinx.multik.api.ndarray
 import org.opencv.core.*
 import org.opencv.core.Core.flip
 import org.opencv.highgui.HighGui.*
@@ -132,9 +134,14 @@ fun draw_functions() {
 
     ellipse(img, Point(256.0, 256.0), Size(100.0, 50.0), 0.0, 0.0, 180.0, Scalar(255.0, 0.0, 0.0), -1)
 
+//    val pts = mk.ndarray(mk[mk[10, 5], mk[20, 30], mk[70, 20], mk[50, 10]])
+//    val intD3NDArray = pts.reshape(-1, 1, 2)
 
-//    val pts = mutableListOf<MatOfPoint>()
-//    polylines(img,,true, Scalar(0.0, 255.0, 255.0))
+//    val points = listOf(Point(10.0, 5.0), Point(20.0, 30.0), Point(70.0, 20.0), Point(50.0, 10.0))
+    val matOfPoints = mutableListOf<MatOfPoint>()
+    matOfPoints.add(MatOfPoint(Point(10.0, 5.0), Point(20.0, 30.0), Point(70.0, 20.0), Point(50.0, 10.0)))
+    polylines(img, matOfPoints, true, Scalar(0.0, 255.0, 255.0))
+
 
     putText(img, "opencv", Point(10.0, 500.0), FONT_HERSHEY_SIMPLEX, 4.0, Scalar(255.0, 255.0, 255.0), 2, LINE_AA)
 
