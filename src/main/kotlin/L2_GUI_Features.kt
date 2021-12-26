@@ -1,5 +1,3 @@
-import org.jetbrains.kotlinx.multik.api.mk
-import org.jetbrains.kotlinx.multik.api.ndarray
 import org.opencv.core.*
 import org.opencv.core.Core.flip
 import org.opencv.highgui.HighGui.*
