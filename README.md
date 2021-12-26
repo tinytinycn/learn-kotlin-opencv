@@ -65,12 +65,13 @@ at com.company.Main.main(Main.java:16)
 15. 执行 `make -j8` 进行编译, 等待编译结束
 16. 编译成功100%后, 执行 `make install`, 进行安装
 17. java 8 版本的opencv jar 和依赖库安装至 `/usr/local/Cellar/opencv_jdk8/share/java/opencv4/`
-18. 创建Kotlin 项目，在IntelliJ IDEA 中配置项目模块依赖, 让编辑器可以找到动态库所在的位置
-19. kotlin代码中 需要加载Java 库文件 
+18. 创建Kotlin 项目，在IntelliJ IDEA 中配置项目模块依赖, 让编辑器可以找到jar所在的位置
+19. 配置VM option `-Djava.library.path=/usr/local/Cellar/opencv_jdk8/share/java/opencv4/` ,让编译器可以找到动态库所在的位置
+20. kotlin代码中 需要加载Java 库文件 
 ```kotlin
 System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 ```
-20. 在External Libraries 中可以查看opencv-455.jar 的 META-INF/MANIFEST.MF, 可以发现编译java版本为 1.8
+21. 在External Libraries 中可以查看opencv-455.jar 的 META-INF/MANIFEST.MF, 可以发现编译java版本为 1.8
 ```text
 Manifest-Version: 1.0
 Ant-Version: Apache Ant 1.10.12
