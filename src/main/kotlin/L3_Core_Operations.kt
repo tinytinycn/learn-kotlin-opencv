@@ -1,4 +1,3 @@
-import jdk.jfr.internal.handlers.EventHandler.timestamp
 import org.opencv.core.*
 import org.opencv.highgui.HighGui.*
 import org.opencv.imgcodecs.Imgcodecs
@@ -170,6 +169,21 @@ fun image_arithmetic_operations() {
     waitKey(1)
 }
 
+fun performance_measurement() {
+    val resourcesPath = System.getProperty("user.dir") + "/src/main/resources/"
+    val testResultOutPath = resourcesPath + "test_result_out/"
+    println("资源路径: $resourcesPath")
+
+    val tickCount = Core.getTickCount()
+    val img = imread(resourcesPath + "tiny-logo.jpeg")
+    for (i in 5..49 step 2) {
+        medianBlur(img, img, i)
+    }
+    val tickCount1 = Core.getTickCount()
+    val t = (tickCount1 - tickCount) / Core.getTickFrequency()
+    println("t: $t")
+}
+
 /**
  * 在本节中，您将学习图像的基本操作，如像素编辑、几何变换、代码优化、一些数学工具等。
  * In this section you will learn basic operations on image like pixel editing,
@@ -189,5 +203,10 @@ fun main() {
 
     // 图像的算术操作
     // 对图像执行算术运算
-    image_arithmetic_operations()
+//    image_arithmetic_operations()
+
+    // 性能测量和改进技术
+    // 获得解决方案很重要。但以最快的方式获得它更重要。学习检查代码的速度，优化代码等。
+    performance_measurement()
+
 }
