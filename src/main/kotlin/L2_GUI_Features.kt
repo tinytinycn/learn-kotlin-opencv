@@ -1,5 +1,6 @@
 import org.opencv.core.*
 import org.opencv.core.Core.flip
+import org.opencv.highgui.HighGui
 import org.opencv.highgui.HighGui.*
 import org.opencv.imgcodecs.Imgcodecs.imread
 import org.opencv.imgcodecs.Imgcodecs.imwrite
@@ -163,6 +164,7 @@ fun main() {
 //    save_a_video()
 
     // 3. Learn to draw lines, rectangles, ellipses, circles, etc with OpenCV
-    draw_functions()
+//    draw_functions()
+
 
 }
