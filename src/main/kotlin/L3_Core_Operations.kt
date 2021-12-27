@@ -2,7 +2,10 @@ import jdk.jfr.internal.handlers.EventHandler.timestamp
 import org.opencv.core.*
 import org.opencv.highgui.HighGui.*
 import org.opencv.imgcodecs.Imgcodecs
+import org.opencv.imgcodecs.Imgcodecs.imread
 import org.opencv.imgcodecs.Imgcodecs.imwrite
+import org.opencv.imgproc.Imgproc
+import org.opencv.imgproc.Imgproc.*
 import java.time.Clock
 import java.time.ZoneId
 import kotlin.time.Duration
@@ -91,8 +94,8 @@ fun image_basic_operations() {
     println("(行, 列, 通道, 大小, 类型)：(${img.rows()}, ${img.cols()}, ${img.channels()}, ${img.total()}, ${img.type()})")
 
     // roi
-    val range = Range(5, 35)
-    val rect = Rect(10, 10, 30, 30)
+//    val range = Range(5, 35)
+//    val rect = Rect(10, 10, 30, 30)
 //    imshow("range roi img", Mat(img, range))
 //    waitKey()
 //    imshow("rect roi img", Mat(img, rect))
@@ -119,6 +122,54 @@ fun image_basic_operations() {
 
 }
 
+fun image_arithmetic_operations() {
+    val resourcesPath = System.getProperty("user.dir") + "/src/main/resources/"
+    val testResultOutPath = resourcesPath + "test_result_out/"
+    println("资源路径: $resourcesPath")
+
+    // 图像融合
+//    val img1 = imread(resourcesPath + "opencv.png")
+//    val img2 = imread(resourcesPath + "opencv_2.png")
+//    val dstMat = Mat()
+//    Core.addWeighted(img1, 0.7, img2, 0.3, 0.0, dstMat)
+//    imshow("融合后", dstMat)
+//    waitKey()
+
+    // 按位运算
+    val img3 = imread(resourcesPath + "tiny-logo.jpeg")
+    val img4 = imread(resourcesPath + "opencv.png")
+    // 创建roi, 把opencv放置在图片左上角
+    val roiRect = Rect(150, 150, img4.cols(), img4.rows())// 宽对应cols, 高对应rows
+    val roi = Mat(img3, roiRect)
+
+    // 创建logo的掩码，并同时创建其相反掩码
+    val img4Gray = Mat()
+    cvtColor(img4, img4Gray, COLOR_BGR2GRAY)
+
+    val mask = Mat()
+    threshold(img4Gray, mask, 10.0, 255.0, THRESH_BINARY)
+    val mask_inv = Mat()
+    Core.bitwise_not(mask, mask_inv)
+
+    // 将roi中logo的区域涂黑
+    val img3Bg = Mat()
+    Core.bitwise_and(roi, roi, img3Bg, mask_inv)
+    // 仅从logo图像中提取logo区域
+    val img4Bg = Mat()
+    Core.bitwise_and(img4, img4, img4Bg, mask)
+    // 将logo放入ROI并修改主图像
+    val dstMat2 = Mat()
+    Core.add(img3Bg, img4Bg, dstMat2)
+    // 替换原图部分区域
+    val submat = img3.submat(roiRect)
+    dstMat2.copyTo(submat)
+    imshow("res", img3)
+    waitKey()
+
+    destroyAllWindows()
+    waitKey(1)
+}
+
 /**
  * 在本节中，您将学习图像的基本操作，如像素编辑、几何变换、代码优化、一些数学工具等。
  * In this section you will learn basic operations on image like pixel editing,
@@ -134,5 +185,9 @@ fun main() {
 
     // 图像的基本操作
     // 学习读取和编辑像素值，使用图像 ROI 和其他基本操作
-    image_basic_operations()
+//    image_basic_operations()
+
+    // 图像的算术操作
+    // 对图像执行算术运算
+    image_arithmetic_operations()
 }
