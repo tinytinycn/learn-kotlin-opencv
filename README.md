@@ -48,7 +48,7 @@ at com.company.Main.main(Main.java:16)
 10. 创建编译目录, `mkdir build`
 11. 进入编译目录, `cd build`
 12. 创建安装目录, `mkdir /user/local/Cellar/opencv_jdk8`
-13. 编译检查 `cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHAERED_LIBS=OFF -DCMAKE_INSTALL_PREFIX=/usr/local/Cellar/opencv_jdk8 ../`
+13. 编译检查 `cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DCMAKE_INSTALL_PREFIX=/usr/local/Cellar/opencv_jdk8 ../`
 ```text
 -- Java:
 -- ant:                         /usr/local/bin/ant (ver 1.10.11)
