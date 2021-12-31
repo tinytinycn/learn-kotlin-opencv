@@ -1,8 +1,8 @@
 import org.opencv.core.*
 import org.opencv.core.Core.*
+import org.opencv.core.CvType.CV_8UC1
 import org.opencv.highgui.HighGui.*
-import org.opencv.imgcodecs.Imgcodecs.IMREAD_GRAYSCALE
-import org.opencv.imgcodecs.Imgcodecs.imread
+import org.opencv.imgcodecs.Imgcodecs.*
 import org.opencv.imgproc.Imgproc
 import org.opencv.imgproc.Imgproc.*
 import org.opencv.videoio.VideoCapture
@@ -24,10 +24,150 @@ fun main() {
 //    geometricTransformations()
 
     // 4.3 图像阈值
-    imageThresholding()
+//    imageThresholding()
+
+    // 4.4 图像平滑
+//    imageSmoothing()
+
+    // 4.5 形态转换
+//    morphologicalTransformations()
+
+    // 4.6 图像梯度
+    imageGradients()
+
 }
 
-// 在本教程中，您将学习简单阈值，自适应阈值和Otsu阈值。
+
+// 学习查找图像梯度，边缘等
+fun imageGradients() {
+    val resourcesPath = System.getProperty("user.dir") + "/src/main/resources/"
+    val testResultOutPath = resourcesPath + "test_result_out/"
+    println("资源路径: $resourcesPath")
+
+    val gray = imread(resourcesPath + "L4/origin.jpg", IMREAD_GRAYSCALE)
+    println("gray img depth: ${gray.depth()}")
+    val laplacian = Mat()
+    Laplacian(gray, laplacian, gray.depth())
+    val sobelX = Mat()
+    Sobel(gray, sobelX, gray.depth(), 1, 0, 5)
+    val sobelY = Mat()
+    Sobel(gray, sobelY, gray.depth(), 0, 1, 5)
+
+    val final = Mat()
+    hconcat(listOf(gray, laplacian, sobelX, sobelY), final)
+    imshow("final", final)
+    waitKey()
+
+    exitProcess(0)
+}
+
+// 学习不同的形态学操作，例如侵蚀，膨胀，开运算，闭运算等。
+fun morphologicalTransformations() {
+    val resourcesPath = System.getProperty("user.dir") + "/src/main/resources/"
+    val testResultOutPath = resourcesPath + "test_result_out/"
+    println("资源路径: $resourcesPath")
+
+    // 侵蚀
+//    val img = imread(resourcesPath + "L4/j.png")
+//    val kernel = Mat.ones(5, 5, CvType.CV_8UC1)
+//    val erosion = Mat()
+//    erode(img, erosion, kernel)
+//    imshow("erosion", erosion)
+//    waitKey()
+
+    // 扩张
+//    val img = imread(resourcesPath + "L4/j.png")
+//    val kernel = Mat.ones(5, 5, CvType.CV_8UC1)
+//    val dilation = Mat()
+//    dilate(img, dilation, kernel)
+//    imshow("dilation", dilation)
+//    waitKey()
+
+    // 开运算， 先侵蚀再扩张
+//    val img = imread(resourcesPath + "L4/opening.png")
+//    val kernel = Mat.ones(5, 5, CvType.CV_8UC1)
+//    val opening = Mat()
+//    morphologyEx(img, opening, MORPH_OPEN, kernel)
+//    imshow("opening", opening)
+//    waitKey()
+
+    // 闭运算， 先扩展在侵蚀
+//    val img = imread(resourcesPath + "L4/closing.png")
+//    val kernel = Mat.ones(5, 5, CvType.CV_8UC1)
+//    val closing = Mat()
+//    morphologyEx(img, closing, MORPH_CLOSE, kernel)
+//    imshow("closing", closing)
+//    waitKey()
+
+    // 形态学梯度
+    val img = imread(resourcesPath + "L4/j.png")
+    val kernel = Mat.ones(5, 5, CvType.CV_8UC1)
+    val gradient = Mat()
+    morphologyEx(img, gradient, MORPH_GRADIENT, kernel)
+    // 顶帽
+    val tophat = Mat()
+    morphologyEx(img, tophat, MORPH_TOPHAT, kernel)
+    // 黑帽
+    val blackhat = Mat()
+    morphologyEx(img, blackhat, MORPH_BLACKHAT, kernel)
+
+    val final = Mat()
+    vconcat(listOf(img, gradient, tophat, blackhat), final)
+    imshow("final", final)
+    waitKey()
+
+    // exit
+    exitProcess(0)
+}
+
+// 学习使用各种低通滤镜模糊图像 - 将定制的滤镜应用于图像（2D卷积）
+fun imageSmoothing() {
+    val resourcesPath = System.getProperty("user.dir") + "/src/main/resources/"
+    val testResultOutPath = resourcesPath + "test_result_out/"
+    println("资源路径: $resourcesPath")
+    val img = imread(resourcesPath + "L4/opencv_3.png")
+
+    // 平均
+//    val kernel = Mat.ones(5, 5, IMREAD_COLOR)
+//    val kernel_avg = Mat()
+//    divide(0.04, kernel, kernel_avg, CvType.CV_32FC1)
+//    println("kernel_avg: ${kernel_avg.dump()}")
+//    val res = Mat()
+//    filter2D(img, res, -1, kernel_avg)
+//    val final = Mat()
+//    hconcat(listOf(img, res), final)
+//    imshow("final", final)
+//    waitKey()
+
+    // 高斯模糊
+//    val blur = Mat()
+//    GaussianBlur(img, blur, Size(5.0, 5.0), 0.0)
+//    val final = Mat()
+//    hconcat(listOf(img, blur), final)
+//    imshow("final", final)
+//    waitKey()
+
+    // 中位模糊
+//    val blur = Mat()
+//    medianBlur(img, blur, 5)
+//    val final = Mat()
+//    hconcat(listOf(img, blur), final)
+//    imshow("final", final)
+//    waitKey()
+
+    // 双边滤波
+    val img2 = imread(resourcesPath + "L4/wenli.png")
+    val blur = Mat()
+    bilateralFilter(img2, blur, 9, 75.0, 75.0)
+    val final = Mat()
+    hconcat(listOf(img2, blur), final)
+    imshow("final", final)
+    waitKey()
+
+    exitProcess(0)
+}
+
+// 学习简单阈值，自适应阈值和Otsu阈值。
 fun imageThresholding() {
     val resourcesPath = System.getProperty("user.dir") + "/src/main/resources/"
     val testResultOutPath = resourcesPath + "test_result_out/"
