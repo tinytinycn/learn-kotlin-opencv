@@ -1,6 +1,7 @@
 import org.opencv.core.*
 import org.opencv.core.Core.*
 import org.opencv.highgui.HighGui.*
+import org.opencv.imgcodecs.Imgcodecs.IMREAD_GRAYSCALE
 import org.opencv.imgcodecs.Imgcodecs.imread
 import org.opencv.imgproc.Imgproc
 import org.opencv.imgproc.Imgproc.*
@@ -20,7 +21,73 @@ fun main() {
 //    changingColorSpaces()
 
     // 4.2 图像的几何变换
-    geometricTransformations()
+//    geometricTransformations()
+
+    // 4.3 图像阈值
+    imageThresholding()
+}
+
+// 在本教程中，您将学习简单阈值，自适应阈值和Otsu阈值。
+fun imageThresholding() {
+    val resourcesPath = System.getProperty("user.dir") + "/src/main/resources/"
+    val testResultOutPath = resourcesPath + "test_result_out/"
+    println("资源路径: $resourcesPath")
+    val img = imread(resourcesPath + "tiny-logo.jpeg")
+
+    // 简单阈值
+//    val res1 = Mat()
+//    threshold(img, res1, 127.0, 255.0, THRESH_BINARY)
+//    imshow("binary", res1)
+//    waitKey()
+//    val res2 = Mat()
+//    threshold(img, res2, 127.0, 255.0, THRESH_BINARY_INV)
+//    imshow("binary_inv", res2)
+//    waitKey()
+//    val res3 = Mat()
+//    threshold(img, res3, 127.0, 255.0, THRESH_TRUNC)
+//    imshow("trunc", res3)
+//    waitKey()
+//    val res4 = Mat()
+//    threshold(img, res4, 127.0, 255.0, THRESH_TOZERO)
+//    imshow("tozero", res4)
+//    waitKey()
+//    val res5 = Mat()
+//    threshold(img, res5, 127.0, 255.0, THRESH_TOZERO_INV)
+//    imshow("tozero_inv", res5)
+//    waitKey()
+
+    // 自适应阈值
+//    val img2 = imread(resourcesPath + "panda.jpg", IMREAD_GRAYSCALE)
+//    medianBlur(img2, img2, 5)
+//    imshow("medianBlur", img2)
+//    waitKey()
+//    val res1 = Mat()
+//    threshold(img2, res1, 127.0, 255.0, THRESH_BINARY)
+//    val res2 = Mat()
+//    adaptiveThreshold(img2, res2, 255.0, ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, 11, 2.0)
+//    val res3 = Mat()
+//    adaptiveThreshold(img2, res3, 255.0, ADAPTIVE_THRESH_GAUSSIAN_C, THRESH_BINARY, 11, 2.0)
+//    val res4 = Mat()
+//    hconcat(listOf(res1, res2, res3), res4)//矩阵合并：vconcat,hconcat
+//    imshow("final", res4)
+//    waitKey()
+
+    // Otsu二值化
+    val img3 = imread(resourcesPath + "sukdo.jpg", IMREAD_GRAYSCALE)
+    val res1 = Mat()
+    threshold(img3, res1, 127.0, 255.0, THRESH_BINARY)//全局阈值
+    val res2 = Mat()
+    threshold(img3, res2, 0.0, 255.0, THRESH_BINARY + THRESH_OTSU)//otsu阈值
+    val res3 = Mat()
+    GaussianBlur(img3, res3, Size(5.0, 5.0), 0.0)//高斯滤波后在otsu阈值
+    val res4 = Mat()
+    threshold(res3, res4, 0.0, 255.0, THRESH_BINARY + THRESH_OTSU)
+    val res5 = Mat()
+    hconcat(listOf(res1, res2, res4), res5)//矩阵合并
+    imshow("final", res5)
+    waitKey()
+
+    exitProcess(0)
 }
 
 // 学习将不同的几何变换应用到图像上，如平移、旋转、仿射变换等。
