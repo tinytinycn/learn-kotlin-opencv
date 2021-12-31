@@ -33,10 +33,28 @@ fun main() {
 //    morphologicalTransformations()
 
     // 4.6 图像梯度
-    imageGradients()
+//    imageGradients()
+
+    // 4.7 Canny边缘检测
+    cannyEdgeDetection()
 
 }
 
+
+//  学习Canny边缘检测的概念
+fun cannyEdgeDetection() {
+    val resourcesPath = System.getProperty("user.dir") + "/src/main/resources/"
+    val testResultOutPath = resourcesPath + "test_result_out/"
+    println("资源路径: $resourcesPath")
+
+    val img = imread(resourcesPath + "panda.jpg")
+    val canny = Mat()
+    Canny(img, canny, 100.0, 200.0)
+    imshow("canny", canny)
+    waitKey()
+
+    exitProcess(0)
+}
 
 // 学习查找图像梯度，边缘等
 fun imageGradients() {
