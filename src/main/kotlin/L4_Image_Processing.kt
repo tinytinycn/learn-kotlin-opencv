@@ -36,10 +36,117 @@ fun main() {
 //    imageGradients()
 
     // 4.7 Canny边缘检测
-    cannyEdgeDetection()
+//    cannyEdgeDetection()
 
+    // 4.8 图像金字塔
+    imagePyramids()
 }
 
+// 学习图像金字塔 - 我们将使用图像金字塔创建一个新的水果“Orapple”
+fun imagePyramids() {
+    val resourcesPath = System.getProperty("user.dir") + "/src/main/resources/"
+    val testResultOutPath = resourcesPath + "test_result_out/"
+    println("资源路径: $resourcesPath")
+
+    // 金字塔
+//    val origin = imread(resourcesPath + "panda.jpg")
+//    val higher_reso2 = Mat()
+//    pyrDown(origin, higher_reso2)
+//    imshow("higher_reso2", higher_reso2)
+//    waitKey()
+
+    // apple orange 融合
+    val apple = imread(resourcesPath + "L4/apple.png")
+    val orange = imread(resourcesPath + "L4/orange.png")
+
+    // direct image
+    val real_apple = Mat()
+    apple.copyTo(real_apple)
+    val real_orange = Mat()
+    orange.copyTo(real_orange)
+
+    // apple 高斯金字塔
+    val appleCopy = Mat()
+    apple.copyTo(appleCopy)
+    val gpApple = mutableListOf(appleCopy)
+    for (i in 1..6) {
+        val G = apple
+        pyrDown(G, G)
+        val tmp = Mat()
+        G.copyTo(tmp)
+        gpApple.add(tmp)
+    }
+
+    // orange 高斯金字塔
+    val orangeCopy = Mat()
+    orange.copyTo(orangeCopy)
+    val gpOrange = mutableListOf(orangeCopy)
+    for (i in 1..6) {
+        val G = orange
+        pyrDown(G, G)
+        val tmp = Mat()
+        G.copyTo(tmp)
+        gpOrange.add(tmp)
+    }
+    // apple 拉普拉斯金字塔
+    val lpApple = mutableListOf(gpApple[5])
+    for (i in 5 downTo 1) {
+        val GE = Mat()
+        pyrUp(gpApple[i], GE)
+        val L = Mat()
+
+        println("GE $GE")
+        println("gpApple[${i - 1}] ${gpApple[i - 1]}")
+        println("======")
+        subtract(gpApple[i - 1], GE, L)
+        lpApple.add(L)
+    }
+    // orange 拉普拉斯金字塔
+    val lpOrange = mutableListOf(gpOrange[5])
+    for (i in 5 downTo 1) {
+        val GE = Mat()
+        pyrUp(gpOrange[i], GE)
+        val L = Mat()
+        subtract(gpOrange[i - 1], GE, L)
+        lpOrange.add(L)
+    }
+    // 在每个级别中添加左右两半图像
+    val LS = mutableListOf<Mat>()
+    val zip = lpApple.zip(lpOrange)
+    for ((la, lb) in zip) {
+        val rows = la.rows()
+        val cols = la.cols()
+        val left = Mat(la, Range(0, rows), Range(0, cols / 2))
+        val right = Mat(lb, Range(0, rows), Range(cols / 2, cols))
+        val merge = Mat()
+        hconcat(listOf(left, right), merge)
+        LS.add(merge)
+    }
+    for (ls in LS) {
+        println("ls -> $ls")
+    }
+
+    // 重建
+    var ls = LS[0]
+    for (i in 1..5) {
+        pyrUp(ls, ls)
+        val addRes = Mat()
+        add(ls, LS[i], addRes)
+        ls = addRes
+    }
+    imshow("pyramid_blending", ls)
+    waitKey()
+
+    // 直接连接每一半的图像
+    val real_left = Mat(real_apple, Range(0, real_apple.rows()), Range(0, real_apple.cols() / 2))
+    val real_right = Mat(real_orange, Range(0, real_orange.rows()), Range(real_orange.cols() / 2, real_orange.cols()))
+    val real = Mat()
+    hconcat(listOf(real_left, real_right), real)
+    imshow("direct_blending", real)
+    waitKey()
+
+    exitProcess(0)
+}
 
 //  学习Canny边缘检测的概念
 fun cannyEdgeDetection() {
