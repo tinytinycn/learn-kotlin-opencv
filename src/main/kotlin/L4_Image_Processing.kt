@@ -39,7 +39,83 @@ fun main() {
 //    cannyEdgeDetection()
 
     // 4.8 图像金字塔
-    imagePyramids()
+//    imagePyramids()
+
+    // 4.9.1 图像轮廓
+//    imgContours()
+
+    // 4.9.2 轮廓特征
+    contourFeatures()
+}
+
+// 学习找到轮廓的不同特征，如面积、周长、边界矩形等。
+fun contourFeatures() {
+    val resourcesPath = System.getProperty("user.dir") + "/src/main/resources/"
+    val testResultOutPath = resourcesPath + "test_result_out/"
+    println("资源路径: $resourcesPath")
+
+    // 1 特征矩
+    val img = imread(resourcesPath + "L4/contour.png", IMREAD_GRAYSCALE)
+    val threshImg = Mat()
+    threshold(img, threshImg, 127.0, 255.0, 0)
+    val contour = mutableListOf<MatOfPoint>()
+    val hierarchy = Mat()
+    findContours(threshImg, contour, hierarchy, RETR_LIST, CHAIN_APPROX_SIMPLE)
+    val cnt = contour[0]
+    println("cnt: $cnt")
+    val M = moments(cnt)
+    println("M: $M")
+
+    // 2 轮廓面积
+    val area = contourArea(cnt)
+    println("面积: $area")
+
+    // 3 轮廓周长
+    val perimeter = arcLength(MatOfPoint2f(*cnt.toArray()), true)
+    println("周长: $perimeter")
+
+    // 4 轮廓近似
+    val approxMatList = mutableListOf<MatOfPoint>()
+    kotlin.repeat(contour.size) {
+        val epsilon = perimeter * 0.01
+        val approxMat = MatOfPoint2f()
+        approxPolyDP(MatOfPoint2f(*cnt.toArray()), approxMat, epsilon, true)
+        val tmp = MatOfPoint(*approxMat.toArray())
+        approxMatList.add(tmp)
+    }
+
+    // 绘制轮廓
+    val final = Mat()
+    img.copyTo(final)
+    drawContours(final, approxMatList, 0, Scalar(127.0, 0.0, 0.0), 3)
+    imshow("final", final)
+    waitKey()
+    System.exit(0)
+}
+
+// 学习寻找和绘制轮廓
+fun imgContours() {
+    val resourcesPath = System.getProperty("user.dir") + "/src/main/resources/"
+    val testResultOutPath = resourcesPath + "test_result_out/"
+    println("资源路径: $resourcesPath")
+
+    // 二进制图像轮廓
+    val img = imread(resourcesPath + "L4/star_2.png")
+    println("img ${img.size()}")
+    val gray = Mat()
+    cvtColor(img, gray, COLOR_BGR2GRAY)
+    val thresholdGray = Mat()
+    threshold(gray, thresholdGray, 127.0, 255.0, 0)
+    val contour = mutableListOf<MatOfPoint>()
+    val hierarchy = Mat()
+    findContours(thresholdGray, contour, hierarchy, RETR_TREE, CHAIN_APPROX_SIMPLE)
+    val final = Mat()
+    img.copyTo(final)
+    println("contour ${contour.size}")
+    drawContours(final, contour, 0, Scalar(0.0, 255.0, 0.0), 3)
+    imshow("final", final)
+    waitKey()
+    System.exit(0)
 }
 
 // 学习图像金字塔 - 我们将使用图像金字塔创建一个新的水果“Orapple”
